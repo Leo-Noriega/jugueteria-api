@@ -37,8 +37,8 @@ jspm_packages/
 
 # Dev Containers
 .devcontainer/
-Dockerfile
-docker-compose.yml
+#Dockerfile
+#docker-compose.yml
 
 # OS-specific files
 .DS_Store
