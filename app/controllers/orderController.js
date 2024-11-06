@@ -1,0 +1,94 @@
+import Order from '../models/Order.js';
+import bcrypt from 'bcrypt';
+
+const createOrder = async (req, res) => {
+    try {
+        const orderData = req.body;
+        const newOrder = await Order.create(orderData);
+        res.status(201).json(newOrder);
+    } catch (error) {
+        console.error("Error al crear la orden:", error);
+        if (error.name === 'SequelizeValidationError') {
+            const validationErrors = {};
+            error.errors.forEach(err => {
+                validationErrors[err.path] = err.message;
+            });
+            return res.status(400).json({ errors: validationErrors });
+        } else {
+            res.status(500).json({ error: "Error al crear la orden" });
+        }
+    }
+};
+
+const getOrders = async (req, res) => {
+    try{
+        const orders = await Order.findAll();
+        res.status(200).json(orders);
+    } catch (error){
+        console.error("Error al obtener las ordenes:", error);
+        res.status(500).json({ error: 'Error al obtener las ordenes' });
+    }
+};
+
+const getOrderById = async (req, res) => {
+    try{
+        const order = await Order.findByPk(req.params.id);
+        if (order) {
+            res.status(200).json(order);
+        }else{
+            res.status(404).json({ error: "Orden no encontrada" });
+        }
+    } catch (error){
+        console.error("Error al obtener la orden:", error);
+        res.status(500).json({ error: 'Error al obtener la orden' });
+    }
+};
+
+const updateOrder = async (req, res) => {
+    try {
+        const order = await Order.findByPk(req.params.id);
+        if (order) {
+            await order.update(req.body);
+            res.status(200).json(order);
+        } else {
+            res.status(404).json({ error: "Orden no encontrada" });
+        }
+    } catch (error) {
+        console.error("Error al actualizar la orden:", error);
+        if (error.name === 'SequelizeValidationError') {
+            const validationErrors = {};
+            error.errors.forEach(err => {
+                validationErrors[err.path] = err.message;
+            });
+            return res.status(400).json({ errors: validationErrors });
+        } else {
+            res.status(500).json({ error: "Error al actualizar la orden" });
+        }
+    }
+};
+
+const deleteOrder = async (req, res) => {
+    try {
+        const order = await Order.findByPk(req.params.id);
+        if (order) {
+            await order.destroy();
+            res.status(200).json({
+                message: "Orden eliminada",
+                order: order
+            });
+        } else {
+            res.status(404).json({ error: "Orden no encontrada" });
+        }
+    } catch (error) {
+        console.error("Error al eliminar la orden:", error);
+        res.status(500).json({ error: "Error al eliminar la orden" });
+    }
+};
+
+export {
+    createOrder,
+    getOrders,
+    getOrderById,
+    updateOrder,
+    deleteOrder
+}
