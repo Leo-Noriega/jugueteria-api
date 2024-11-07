@@ -45,15 +45,21 @@ const Order = sequelize.define("Order", {
             }
         }
     },
-    delivery_address: {
-        type: DataTypes.STRING,
-        allowNull: false,
+    delivery_address_id: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'address',
+            key:'id'
+        },
+        onDelete: "set Null"
     },
     created_at: {
         type: DataTypes.DATE,
         defaultValue:sequelize.literal('CURRENT_TIMESTAMP AT TIME ZONE \'America/Mexico_City\'')
     }
 },{
+    tableName:'Orders',
+    timestamps: false,
     updatedAt: false
 });
 

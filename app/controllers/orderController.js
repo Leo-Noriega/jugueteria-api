@@ -4,6 +4,11 @@ import bcrypt from 'bcrypt';
 const createOrder = async (req, res) => {
     try {
         const orderData = req.body;
+        if ('delivery_address' in orderData) {
+            orderData.delivery_address_id = orderData.delivery_address;
+            delete orderData.delivery_address;
+        }
+
         const newOrder = await Order.create(orderData);
         res.status(201).json(newOrder);
     } catch (error) {
