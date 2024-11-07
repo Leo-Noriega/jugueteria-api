@@ -1,23 +1,20 @@
-import {DataTypes} from "sequelize";
+import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+import User from "./User.js";
 
 const Order = sequelize.define("Order", {
-    orderId: {
+    order_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true
     },
-    user_id:{
+    user_id: {
         type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-            model: 'Users',
-            key: 'id'
-        },
-        onDelete: "set Null",
+        allowNull: false,
+        onDelete: 'CASCADE',
     },
-    date:{
+    date: {
         type: DataTypes.DATEONLY,
         allowNull: false,
         defaultValue: DataTypes.NOW,
@@ -25,42 +22,45 @@ const Order = sequelize.define("Order", {
     status: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate:{
-            isIn:{
-                args:[['pendiente', 'completada', 'cancelada']],
-                msg:'El estado debe ser "pendiente", "completada" o "cancelada"'
+        validate: {
+            isIn: {
+                args: [['pendiente', 'completada', 'cancelada']],
+                msg: 'El estado debe ser "pendiente", "completada" o "cancelada"'
             }
         }
     },
-    total:{
-        type: DataTypes.DECIMAL(10,2),
+    total: {
+        type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
-        validate:{
-            isDecimal:{
+        validate: {
+            isDecimal: {
                 msg: 'El total decimal es requerido'
             },
-            min:{
-                args:[0],
-                msg:'El total no puede ser negativo'
+            min: {
+                args: [0],
+                msg: 'El total no puede ser negativo'
             }
         }
     },
-    delivery_address_id: {
+    /*
+    ==================================================
+    TODO: Implementar la relación de Order con Address
+    deliveryAddressId: {
         type: DataTypes.INTEGER,
         references: {
             model: 'address',
-            key:'id'
+            key: 'id'
         },
         onDelete: "set Null"
     },
-    created_at: {
+    */
+    createdAt: {
         type: DataTypes.DATE,
-        defaultValue:sequelize.literal('CURRENT_TIMESTAMP AT TIME ZONE \'America/Mexico_City\'')
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP AT TIME ZONE \'America/Mexico_City\'')
     }
-},{
-    tableName:'Orders',
-    timestamps: false,
-    updatedAt: false
-});
+})
+
+Order.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+User.hasMany(Order, { foreignKey: 'user_id', as: 'orders' });
 
 export default Order;
