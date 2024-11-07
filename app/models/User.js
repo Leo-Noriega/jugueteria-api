@@ -1,11 +1,11 @@
-import {DataTypes} from 'sequelize';
+import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
 
 const User = sequelize.define('User', {
-    id: {
+    user_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
     },
     name: {
         type: DataTypes.STRING,
@@ -20,7 +20,7 @@ const User = sequelize.define('User', {
             }
         }
     },
-    lastName: {
+    last_name: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -61,7 +61,7 @@ const User = sequelize.define('User', {
             }
         }
     },
-    phoneNumber: {
+    phone_number: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -83,11 +83,15 @@ const User = sequelize.define('User', {
         type: DataTypes.BOOLEAN,
         defaultValue: true
     },
-    createdAt: {
+    email_confirmed: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
+    created_at: {
         type: DataTypes.DATE,
         defaultValue: sequelize.literal('CURRENT_TIMESTAMP AT TIME ZONE \'America/Mexico_City\'')
     },
-    updatedAt: {
+    updated_at: {
         type: DataTypes.DATE,
         defaultValue: sequelize.literal('CURRENT_TIMESTAMP AT TIME ZONE \'America/Mexico_City\'')
     }
