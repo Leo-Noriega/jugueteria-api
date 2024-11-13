@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
 import User from "./User.js";
+import Address from "./Address.js";
 
 const Order = sequelize.define("Order", {
     order_id: {
@@ -42,9 +43,6 @@ const Order = sequelize.define("Order", {
             }
         }
     },
-    /*
-    ==================================================
-    TODO: Implementar la relación de Order con Address
     deliveryAddressId: {
         type: DataTypes.INTEGER,
         references: {
@@ -53,7 +51,6 @@ const Order = sequelize.define("Order", {
         },
         onDelete: "set Null"
     },
-    */
     createdAt: {
         type: DataTypes.DATE,
         defaultValue: sequelize.literal('CURRENT_TIMESTAMP AT TIME ZONE \'America/Mexico_City\'')
@@ -62,5 +59,8 @@ const Order = sequelize.define("Order", {
 
 Order.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 User.hasMany(Order, { foreignKey: 'user_id', as: 'orders' });
+
+Order.belongsTo(Address, { foreignKey: 'address_id', as: 'deliveryAddress' });
+Address.hasMany(Order, { foreignKey: 'deliveryAddressId', as: 'orders' });
 
 export default Order;
