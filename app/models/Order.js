@@ -2,6 +2,7 @@ import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
 import User from "./User.js";
 import Address from "./Address.js";
+import OrderDetail from "./OrderDetail.js";
 
 const Order = sequelize.define("Order", {
     order_id: {
@@ -62,5 +63,9 @@ User.hasMany(Order, { foreignKey: 'user_id', as: 'orders' });
 
 Order.belongsTo(Address, { foreignKey: 'address_id', as: 'deliveryAddress' });
 Address.hasMany(Order, { foreignKey: 'deliveryAddressId', as: 'orders' });
+
+Order.hasMany(OrderDetail, { foreignKey: 'order_id', as: 'orderDetails' });
+OrderDetail.belongsTo(Order, { foreignKey: 'order_id', as: 'order' });
+
 
 export default Order;
