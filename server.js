@@ -1,5 +1,6 @@
 import express from 'express'
 import dotenv from 'dotenv'
+import cors from 'cors';
 import sequelize from './app/config/db.js'
 import userRoutes from './app/routes/userRoutes.js'
 import orderRoutes from './app/routes/orderRoutes.js'
@@ -10,6 +11,7 @@ const app = express()
 const PORT = process.env.NODE_DOCKER_PORT
 
 app.use(express.json())
+app.use(cors())//No sé que url se vaya a poner en el front
 
 app.use('/toystore', userRoutes)
 app.use('/toystore', orderRoutes)
