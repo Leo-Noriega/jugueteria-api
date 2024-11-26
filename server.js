@@ -1,13 +1,21 @@
 import express from 'express'
+import cors from 'cors'
 import dotenv from 'dotenv'
 import sequelize from './app/config/db.js'
 import userRoutes from './app/routes/userRoutes.js'
 import orderRoutes from './app/routes/orderRoutes.js'
+import './app/models/associations.js'
 
 dotenv.config()
 
 const app = express()
 const PORT = process.env.NODE_DOCKER_PORT
+
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}))
 
 app.use(express.json())
 

@@ -1,8 +1,5 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
-import User from "./User.js";
-import Address from "./Address.js";
-import OrderDetail from "./OrderDetail.js";
 
 const Order = sequelize.define("Order", {
     order_id: {
@@ -14,7 +11,12 @@ const Order = sequelize.define("Order", {
     user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+            model: 'Users',
+            key: 'user_id'
+        },
         onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
     },
     date: {
         type: DataTypes.DATEONLY,
@@ -47,25 +49,23 @@ const Order = sequelize.define("Order", {
     deliveryAddressId: {
         type: DataTypes.INTEGER,
         references: {
-            model: 'address',
+            model: 'addresses',
             key: 'id'
         },
-        onDelete: "set Null"
+        onDelete: "SET NULL",
+        onUpdate: "CASCADE"
     },
     createdAt: {
         type: DataTypes.DATE,
-        defaultValue: sequelize.literal('CURRENT_TIMESTAMP AT TIME ZONE \'America/Mexico_City\'')
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+    },
+    updatedAt: {
+        type: DataTypes.DATE,
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
     }
-})
-
-Order.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
-User.hasMany(Order, { foreignKey: 'user_id', as: 'orders' });
-
-Order.belongsTo(Address, { foreignKey: 'address_id', as: 'deliveryAddress' });
-Address.hasMany(Order, { foreignKey: 'deliveryAddressId', as: 'orders' });
-
-Order.hasMany(OrderDetail, { foreignKey: 'order_id', as: 'orderDetails' });
-OrderDetail.belongsTo(Order, { foreignKey: 'order_id', as: 'order' });
-
+}, {
+    timestamps: true,
+    tableName: 'orders'
+});
 
 export default Order;
