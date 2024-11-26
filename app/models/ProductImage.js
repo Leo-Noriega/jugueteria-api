@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
-import Product from "./Product.js";
 
 const ProductImage = sequelize.define("ProductImage", {
     product_image_id: {
@@ -13,10 +12,11 @@ const ProductImage = sequelize.define("ProductImage", {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: "Product",
-            key: "product_id",
+            model: 'Products', // Cambiar a 'Products'
+            key: 'product_id'
         },
         onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
     },
     image_url: {
         type: DataTypes.STRING,
@@ -29,11 +29,15 @@ const ProductImage = sequelize.define("ProductImage", {
     },
     createdAt: {
         type: DataTypes.DATE,
-        defaultValue: sequelize.literal('CURRENT_TIMESTAMP AT TIME ZONE \'America/Mexico_City\'')
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+    },
+    updatedAt: {
+        type: DataTypes.DATE,
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
     }
+}, {
+    timestamps: true,
+    tableName: 'product_images'
 });
-
-Product.hasMany(ProductImage, { foreignKey: 'product_id', as: 'images' });
-ProductImage.belongsTo(Product, { foreignKey: 'product_id', as: 'product' });
 
 export default ProductImage;

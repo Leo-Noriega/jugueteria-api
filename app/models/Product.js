@@ -1,10 +1,8 @@
-import {DataTypes} from "sequelize";
+import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
-import Category from "./Category";
-import ProductImage from "./ProductImage";
 
 const Product = sequelize.define("Product", {
-    product_id:{
+    product_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
@@ -13,18 +11,18 @@ const Product = sequelize.define("Product", {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
-        validate:{
-            notEmpty:{
+        validate: {
+            notEmpty: {
                 msg: "El nombre del producto es necesario"
             }
         }
     },
-    description:{
+    description: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    price:{
-        type: DataTypes.DECIMAL(10,2),
+    price: {
+        type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
         validate: {
             isDecimal: {
@@ -36,35 +34,36 @@ const Product = sequelize.define("Product", {
             }
         }
     },
-    category_id:{
+    category_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: "Category",
+            model: "categories",
             key: "id",
         },
         onDelete: 'RESTRICT',
     },
-    stock:{
+    stock: {
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
-            min:{
+            min: {
                 args: [0],
                 msg: "El stock no puede ser negativo"
             }
         }
     },
-    createdAt:{
+    createdAt: {
         type: DataTypes.DATE,
-        defaultValue: sequelize.literal('CURRENT_TIMESTAMP AT TIME ZONE \'America/Mexico_City\'')
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+    },
+    updatedAt: {
+        type: DataTypes.DATE,
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
     }
-})
-
-Product.belongsTo(Category, { foreignKey: 'category_id', as: 'category' });
-Category.hasMany(Product, { foreignKey: 'category_id', as: 'products' });
-
-Product.hasMany(ProductImage, { foreignKey: 'product_id', as: 'images' });
-ProductImage.belongsTo(Product, { foreignKey: 'product_id', as: 'product' });
+}, {
+    timestamps: true,
+    tableName: 'products'
+});
 
 export default Product;

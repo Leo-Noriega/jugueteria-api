@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
-import User from "./User.js";
 
 const Address = sequelize.define("Address", {
     id: {
@@ -13,10 +12,11 @@ const Address = sequelize.define("Address", {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'Users',
-            key: 'id'
+            model: 'Users', // Cambiar a 'Users'
+            key: 'user_id'
         },
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
     },
     street_address: {
         type: DataTypes.STRING,
@@ -31,7 +31,8 @@ const Address = sequelize.define("Address", {
         allowNull: false
     },
     postal_code: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: true
     },
     country: {
         type: DataTypes.STRING,
@@ -45,7 +46,5 @@ const Address = sequelize.define("Address", {
     timestamps: false,
     tableName: 'addresses'
 });
-
-Address.belongsTo(User,{foreignKey:'user_id', as: 'users'});
 
 export default Address;

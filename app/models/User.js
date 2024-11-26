@@ -1,78 +1,38 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../config/db.js';
+import { DataTypes } from "sequelize";
+import sequelize from "../config/db.js";
 
-const User = sequelize.define('User', {
+const User = sequelize.define("User", {
     user_id: {
         type: DataTypes.INTEGER,
+        allowNull: false,
         primaryKey: true,
-        autoIncrement: true,
+        autoIncrement: true
     },
     name: {
         type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            notNull: {
-                msg: 'El nombre es requerido'
-            },
-            len: {
-                args: [3, 50],
-                msg: 'El nombre debe tener entre 3 y 50 caracteres'
-            }
-        }
+        allowNull: false
     },
     last_name: {
         type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            notNull: {
-                msg: 'El apellido es requerido'
-            },
-            len: {
-                args: [3, 50],
-                msg: 'El apellido debe tener entre 3 y 50 caracteres'
-            }
-        }
+        allowNull: false
     },
     email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: {
-            msg: 'El email ya está registrado'
-        },
+        unique: true,
         validate: {
-            notNull: {
-                msg: 'El email es requerido'
-            },
             isEmail: {
-                msg: 'El email debe ser un correo válido'
+                msg: "Debe ser un correo válido"
             }
         }
     },
     password: {
         type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            notNull: {
-                msg: 'La contraseña es requerida'
-            },
-            len: {
-                args: [8, 100],
-                msg: 'La contraseña debe tener entre 8 y 50 caracteres'
-            }
-        }
+        allowNull: false
     },
     phone_number: {
         type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            notNull: {
-                msg: 'El teléfono es requerido'
-            },
-            len: {
-                args: [10],
-                msg: 'El teléfono debe tener entre 10 y 15 caracteres'
-            }
-        }
+        allowNull: false
     },
     role: {
         type: DataTypes.STRING,
@@ -89,12 +49,17 @@ const User = sequelize.define('User', {
     },
     created_at: {
         type: DataTypes.DATE,
-        defaultValue: sequelize.literal('CURRENT_TIMESTAMP AT TIME ZONE \'America/Mexico_City\'')
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
     },
     updated_at: {
         type: DataTypes.DATE,
-        defaultValue: sequelize.literal('CURRENT_TIMESTAMP AT TIME ZONE \'America/Mexico_City\'')
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
     }
-})
+}, {
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    tableName: 'users'
+});
 
 export default User;

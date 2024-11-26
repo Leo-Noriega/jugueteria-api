@@ -2,6 +2,26 @@ import User from '../models/User.js';
 import sendMail from '../utils/mailSender.js';
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ where: { email: email } });
+    if (!user) {
+      return res.status(401).json({ error: 'Usuario no registrado' });
+    }
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      return res.status(401).json({ error: 'Contraseña incorrecta' });
+    }
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.status(200).json({ token, userId: user.user_id});
+  } catch (error) {
+    console.error("Error al iniciar sesión:", error);
+    res.status(500).json({ error: "Error al iniciar sesión" });
+  }
+};
 
 const createUser = async (req, res) => {
   try {
@@ -173,6 +193,7 @@ export {
   updateUser,
   updatePassword,
   deleteUser,
+  loginUser,
   requestPasswordReset,
   updatePasswordWithCode
 }
