@@ -1,4 +1,6 @@
 import User from '../models/User.js';
+import sendMail from '../utils/mailSender.js';
+import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -140,6 +142,50 @@ const deleteUser = async (req, res) => {
   }
 }
 
+const requestPasswordReset = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+
+    const resetCode = crypto.randomBytes(4).toString('hex');
+    user.resetCode = resetCode;
+    await user.save();
+
+    await sendMail(email, 'Código de actualización de contraseña', `Tu código es:`, resetCode);
+    res.status(200).json({ message: "Código de actualización enviado" });
+  } catch (error) {
+    console.error("Error al solicitar la actualización de contraseña:", error);
+    res.status(500).json({ error: "Error al solicitar la actualización de contraseña" });
+  }
+};
+
+const updatePasswordWithCode = async (req, res) => {
+  try {
+    const { email, resetCode, newPassword } = req.body;
+    const user = await User.findOne({ where: { email, resetCode } });
+    if (!user) {
+      return res.status(404).json({ error: "Código de actualización incorrecto o usuario no encontrado" });
+    }
+
+    if (newPassword.length < 8 || newPassword.length > 100) {
+      return res.status(400).json({ error: "La nueva contraseña debe tener entre 8 y 100 caracteres" });
+    }
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedNewPassword;
+    user.resetCode = null;
+    await user.save();
+
+    res.status(200).json({ message: "Contraseña actualizada correctamente" });
+  } catch (error) {
+    console.error("Error al actualizar la contraseña:", error);
+    res.status(500).json({ error: "Error al actualizar la contraseña" });
+  }
+};
+
 export {
   createUser,
   getUsers,
@@ -147,5 +193,7 @@ export {
   updateUser,
   updatePassword,
   deleteUser,
-  loginUser
+  loginUser,
+  requestPasswordReset,
+  updatePasswordWithCode
 }
