@@ -7,6 +7,7 @@ import {
     updateUser, 
     deleteUser,
     loginUser,
+    updatePassword,
     requestPasswordReset,
     updatePasswordWithCode
  } from '../controllers/userController.js';
@@ -19,8 +20,8 @@ router.get('/users/:id', authMiddleware, getUserById);
 router.put('/users/:id', authMiddleware, updateUser);
 router.delete('/users/:id', authMiddleware, deleteUser);
 router.post('/login', loginUser);
-router.put('/users/:id/password', updatePassword);
 router.delete('/users/:id', deleteUser);
+router.put('/users/:id/password', updatePassword);
 router.post('/users/password-reset', requestPasswordReset);
 router.post('/users/update-password', updatePasswordWithCode);
 
