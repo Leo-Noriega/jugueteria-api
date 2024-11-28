@@ -6,7 +6,7 @@ const OrderDetail = sequelize.define("OrderDetail", {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: "Orders",
+            model: "orders",
             key: 'order_id',
         },
         ondelete: 'CASCADE'
@@ -15,7 +15,7 @@ const OrderDetail = sequelize.define("OrderDetail", {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'Products',
+            model: 'products',
             key: 'product_id'
         },
         ondelete: 'CASCADE'

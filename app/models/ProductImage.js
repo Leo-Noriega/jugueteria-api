@@ -12,7 +12,7 @@ const ProductImage = sequelize.define("ProductImage", {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'Products', // Cambiar a 'Products'
+            model: 'products', // Cambiar a 'Products'
             key: 'product_id'
         },
         onDelete: 'CASCADE',

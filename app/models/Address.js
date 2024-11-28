@@ -12,7 +12,7 @@ const Address = sequelize.define("Address", {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'Users', // Cambiar a 'Users'
+            model: 'users', // Cambiar a 'Users'
             key: 'user_id'
         },
         onDelete: 'CASCADE',

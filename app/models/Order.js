@@ -12,7 +12,7 @@ const Order = sequelize.define("Order", {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'Users',
+            model: 'users',
             key: 'user_id'
         },
         onDelete: 'CASCADE',
