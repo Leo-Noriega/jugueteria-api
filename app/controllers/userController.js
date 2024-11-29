@@ -38,7 +38,9 @@ const createUser = async (req, res) => {
       password: hashedPassword,
       ...restUserData
     });
-    res.status(201).json(user);
+
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.status(201).json({ token, userId: user.user_id });
   } catch (error) {
     console.error("Error al crear el usuario:", error);
     if (error.name === 'SequelizeValidationError') {
@@ -50,7 +52,7 @@ const createUser = async (req, res) => {
     } else {
       return res.status(500).json({ error: "Error al crear el usuario" });
     }
-  };
+  }
 };
 
 const getUsers = async (req, res) => {

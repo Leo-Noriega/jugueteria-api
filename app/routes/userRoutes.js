@@ -14,7 +14,7 @@ import {
 
 const router = express.Router();
 
-router.post('/users', createUser);
+router.post('/register', createUser);
 router.get('/users', getUsers);
 router.get('/users/:id', authMiddleware, getUserById);
 router.put('/users/:id', authMiddleware, updateUser);

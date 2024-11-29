@@ -2,22 +2,6 @@ import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-/*const createPaymentIntent = async (req, res) => {
-    try {
-        const {id, amount} = req.body;
-        const payment = await stripe.paymentIntents.create({
-            amount,
-            currency: 'MXN',
-            description: '',
-            payment_method: id,
-            confirm: true
-        });
-        res.send('Payment successful');
-    } catch (error) {
-        res.json(error.raw.message);
-    }
-};*/
-
 const checkout = async (req, res) => {
     try {
         const { name, quantity, amount } = req.body;
