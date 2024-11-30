@@ -22,7 +22,7 @@ router.delete('/users/:id', authMiddleware, deleteUser);
 router.post('/login', loginUser);
 router.delete('/users/:id', deleteUser);
 router.put('/users/:id/password', updatePassword);
-router.post('/users/password-reset', requestPasswordReset);
+router.post('/users/recovery-password', requestPasswordReset);
 router.post('/users/update-password', updatePasswordWithCode);
 
 export default router;

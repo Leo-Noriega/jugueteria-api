@@ -162,6 +162,7 @@ const requestPasswordReset = async (req, res) => {
 
     const resetUrl = `${process.env.FRONTEND_URL}reset-password?token=${token}`;
     await sendMailChangePassword(email, 'Cambio de contraseña', 'Haz click en el siguiente enlace para cambiar tu contraseña', resetUrl);
+    res.status(200).json({ message: "Correo enviado" });
   } catch (error) {
     
   }
