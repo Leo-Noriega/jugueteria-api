@@ -11,19 +11,19 @@ import Return from "./Return.js";
 import ReturnRequest from "./ReturnRequest.js";
 
 User.hasMany(Address, { foreignKey: 'user_id', as: 'addresses' });
-Address.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+Address.belongsTo(User, { foreignKey: 'user_id', as: 'userAddress' });
 
 User.hasOne(Cart, { foreignKey: 'user_id', as: 'cart' });
-Cart.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+Cart.belongsTo(User, { foreignKey: 'user_id', as: 'userCart' });
 
 User.hasMany(Order, { foreignKey: 'user_id', as: 'orders' });
-Order.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+Order.belongsTo(User, { foreignKey: 'user_id', as: 'userOrder' });
 
 User.hasMany(ReturnRequest, { foreignKey: 'user_id', as: 'returnRequests' });
-ReturnRequest.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+ReturnRequest.belongsTo(User, { foreignKey: 'user_id', as: 'userReturnRequest' });
 
 User.hasMany(Return, { foreignKey: 'user_id', as: 'returns' });
-Return.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+Return.belongsTo(User, { foreignKey: 'user_id', as: 'userReturn' });
 
 User.hasMany(Return, { foreignKey: 'processed_by', as: 'processedReturns' });
 Return.belongsTo(User, { foreignKey: 'processed_by', as: 'processedBy' });
@@ -32,31 +32,19 @@ Address.hasMany(Order, { foreignKey: 'deliveryAddressId', as: 'orders' });
 Order.belongsTo(Address, { foreignKey: 'deliveryAddressId', as: 'deliveryAddress' });
 
 Product.hasMany(ProductImage, { foreignKey: 'product_id', as: 'images' });
-ProductImage.belongsTo(Product, { foreignKey: 'product_id', as: 'products' });
+ProductImage.belongsTo(Product, { foreignKey: 'product_id', as: 'productImages' });
 
 Product.hasMany(OrderDetail, { foreignKey: 'product_id', as: 'orderDetails' });
-OrderDetail.belongsTo(Product, { foreignKey: 'product_id', as: 'product' });
+OrderDetail.belongsTo(Product, { foreignKey: 'product_id', as: 'orderProduct' });
 
-Product.hasMany(ReturnRequest, { foreignKey: 'product_id', as: 'returnRequests' });
-ReturnRequest.belongsTo(Product, { foreignKey: 'product_id', as: 'product' });
+Product.hasMany(ReturnRequest, { foreignKey: 'product_id', as: 'productReturnRequests' });
+ReturnRequest.belongsTo(Product, { foreignKey: 'product_id', as: 'returnRequestProduct' });
 
-Product.hasMany(Return, { foreignKey: 'product_id', as: 'returns' });
-Return.belongsTo(Product, { foreignKey: 'product_id', as: 'product' });
+Product.hasMany(Return, { foreignKey: 'product_id', as: 'productReturns' });
+Return.belongsTo(Product, { foreignKey: 'product_id', as: 'returnProduct' });
 
 Product.hasMany(CartProduct, { foreignKey: 'product_id', as: 'cartProducts' });
-CartProduct.belongsTo(Product, { foreignKey: 'product_id', as: 'product' });
-
-Category.hasMany(Product, { foreignKey: 'category_id', onDelete: 'RESTRICT', as: 'products' });
-Product.belongsTo(Category, { foreignKey: 'category_id', as: 'category' });
+CartProduct.belongsTo(Product, { foreignKey: 'product_id', as: 'productCart' });
 
 Cart.hasMany(CartProduct, { foreignKey: 'cart_id', as: 'cartProducts' });
 CartProduct.belongsTo(Cart, { foreignKey: 'cart_id', as: 'cart' });
-
-Order.hasMany(OrderDetail, { foreignKey: 'order_id', as: 'orderDetails' });
-OrderDetail.belongsTo(Order, { foreignKey: 'order_id', as: 'order' });
-
-ReturnRequest.belongsTo(Order, { foreignKey: 'order_id', as: 'order' });
-Order.hasMany(ReturnRequest, { foreignKey: 'order_id', as: 'returnRequests' });
-
-Return.belongsTo(Order, { foreignKey: 'order_id', as: 'order' });
-Order.hasMany(Return, { foreignKey: 'order_id', as: 'returns' });

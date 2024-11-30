@@ -1,12 +1,14 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+import Cart from "./Cart.js";
+import Product from "./Product.js";
 
 const CartProduct = sequelize.define("CartProduct", {
     cart_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: "carts",
+            model: Cart,
             key: "id"
         },
         onDelete: "CASCADE",
@@ -16,8 +18,8 @@ const CartProduct = sequelize.define("CartProduct", {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: "products",
-            key: "id"
+            model: Product,
+            key: "product_id"
         },
         onDelete: "CASCADE",
         onUpdate: "CASCADE"

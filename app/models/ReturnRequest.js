@@ -1,5 +1,8 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+import Order from "./Order.js";
+import Product from "./Product.js";
+import User from "./User.js";
 
 const ReturnRequest = sequelize.define("ReturnRequest", {
     id: {
@@ -11,8 +14,8 @@ const ReturnRequest = sequelize.define("ReturnRequest", {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: "orders",
-            key: "id"
+            model: Order,
+            key: "order_id"
         },
         onDelete: "CASCADE",
         onUpdate: "CASCADE"
@@ -21,8 +24,8 @@ const ReturnRequest = sequelize.define("ReturnRequest", {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: "products",
-            key: "id"
+            model: Product,
+            key: "product_id"
         },
         onDelete: "CASCADE",
         onUpdate: "CASCADE"
@@ -31,8 +34,8 @@ const ReturnRequest = sequelize.define("ReturnRequest", {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: "users",
-            key: "id"
+            model: User,
+            key: "user_id"
         },
         onDelete: "SET NULL",
         onUpdate: "CASCADE"

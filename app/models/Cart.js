@@ -14,7 +14,7 @@ const Cart = sequelize.define("Cart", {
         allowNull: false,
         references: {
             model: User,
-            key: 'id'
+            key: 'user_id'
         },
         onDelete: 'CASCADE'
     },
@@ -24,11 +24,7 @@ const Cart = sequelize.define("Cart", {
     }
 }, {
     timestamps: false,
-    tableName: 'cart'
+    tableName: 'carts'
 });
-
-Cart.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
-
-User.hasMany(Cart, { foreignKey: 'user_id',  as: 'carts' });
 
 export default Cart;
