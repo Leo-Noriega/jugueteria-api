@@ -47,6 +47,14 @@ const User = sequelize.define("User", {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     },
+    resetToken: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    tokenExpiration: {
+        type: DataTypes.DATE,
+        allowNull: true,
+    },
     created_at: {
         type: DataTypes.DATE,
         defaultValue: sequelize.literal('CURRENT_TIMESTAMP')

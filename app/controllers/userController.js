@@ -1,5 +1,6 @@
 import User from '../models/User.js';
-import sendMail from '../utils/mailSender.js';
+import sendMailChangePassword from '../utils/mailSender.js';
+import { Op } from 'sequelize';
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -145,48 +146,50 @@ const deleteUser = async (req, res) => {
 }
 
 const requestPasswordReset = async (req, res) => {
+  const { email } = req.body;
   try {
-    const { email } = req.body;
     const user = await User.findOne({ where: { email } });
     if (!user) {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
+    const token = crypto.randomBytes(32).toString('hex');
+    const expiration = new Date(Date.now() + 3600000); // 1 hour
 
-    const resetCode = crypto.randomBytes(4).toString('hex');
-    user.resetCode = resetCode;
-    await user.save();
+    await user.update({
+      resetToken: token,
+      tokenExpiration: expiration
+    });
 
-    await sendMail(email, 'Código de actualización de contraseña', `Tu código es:`, resetCode);
-    res.status(200).json({ message: "Código de actualización enviado" });
+    const resetUrl = `${process.env.FRONTEND_URL}reset-password?token=${token}`;
+    await sendMailChangePassword(email, 'Cambio de contraseña', 'Haz click en el siguiente enlace para cambiar tu contraseña', resetUrl);
   } catch (error) {
-    console.error("Error al solicitar la actualización de contraseña:", error);
-    res.status(500).json({ error: "Error al solicitar la actualización de contraseña" });
+    
   }
 };
 
 const updatePasswordWithCode = async (req, res) => {
+  const { token, password } = req.body;
   try {
-    const { email, resetCode, newPassword } = req.body;
-    const user = await User.findOne({ where: { email, resetCode } });
+    console.log(token);
+    console.log(password)
+
+    const user = await User.findOne({ where: { resetToken: token, tokenExpiration: { [Op.gt]: new Date() } } });
+
     if (!user) {
-      return res.status(404).json({ error: "Código de actualización incorrecto o usuario no encontrado" });
+      return res.status(404).json({ error: "Token inválido o expirado" });
     }
-
-    if (newPassword.length < 8 || newPassword.length > 100) {
-      return res.status(400).json({ error: "La nueva contraseña debe tener entre 8 y 100 caracteres" });
-    }
-
-    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-    user.password = hashedNewPassword;
-    user.resetCode = null;
-    await user.save();
-
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await user.update({
+      password: hashedPassword,
+      resetToken: null,
+      tokenExpiration: null
+    });
     res.status(200).json({ message: "Contraseña actualizada correctamente" });
   } catch (error) {
     console.error("Error al actualizar la contraseña:", error);
     res.status(500).json({ error: "Error al actualizar la contraseña" });
   }
-};
+}; 
 
 export {
   createUser,

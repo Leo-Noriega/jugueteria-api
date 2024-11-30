@@ -10,10 +10,10 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-const sendMail = async (to, subject, text, resetCode) => {
+const sendMailChangePassword = async (to, subject, text, resetUrl) => {
     const templatePath = path.resolve('app/template/emailTemplate.html');
     let html = fs.readFileSync(templatePath, 'utf8');
-    html = html.replace('{{resetCode}}', resetCode);
+    html = html.replace('{{resetUrl}}', resetUrl);
 
     const mailOptions = {
         from: process.env.EMAIL_USER,
@@ -25,13 +25,9 @@ const sendMail = async (to, subject, text, resetCode) => {
 
     try {
         await transporter.sendMail(mailOptions);
-        console.log('EMAIL_USER:', process.env.EMAIL_USER);
-        console.log('EMAIL_PASS:', process.env.EMAIL_PASS);
-        console.log('EMAIL_HOST:', process.env.EMAIL_HOST);
-        console.log('EMAIL_PORT:', process.env.EMAIL_PORT);
     } catch (error) {
         console.error("Error al enviar el correo:", error);
     }
 };
 
-export default sendMail;
+export default sendMailChangePassword;

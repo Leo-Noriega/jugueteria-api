@@ -1,11 +1,89 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Código de Actualización de Contraseña</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recuperación de contraseña - ToyStore</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      color: #263238;
+    }
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    .header {
+      background-color: #f2f2f2;
+      text-align: center;
+      padding: 20px 0;
+    }
+    .header img {
+      max-width: 150px;
+    }
+    .content {
+      padding: 20px;
+      text-align: center;
+    }
+    .content h1 {
+      color: #364349;
+      font-size: 24px;
+    }
+    .content p {
+      font-size: 16px;
+      line-height: 1.5;
+      margin: 10px 0;
+    }
+    .content a {
+      display: inline-block;
+      margin: 20px 0;
+      padding: 10px 20px;
+      background-color: #FFC100;
+      color: #fff;
+      text-decoration: none;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+    .footer {
+      padding: 20px;
+      font-size: 14px;
+      text-align: center;
+      color: #757575;
+      background-color: #f3f3f3;
+    }
+    .footer a {
+      color: #EF1A23;
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
-    <p>Tu código es: <strong>{{resetCode}}</strong></p>
+  <div class="container">
+    <div class="header">
+      <img src="https://via.placeholder.com/150x50?text=ToyStore" alt="ToyStore Logo">
+    </div>
+    
+    <!-- Aqui pones el link  -->
+    <div class="content">
+      <h1>Recupera tu contraseña</h1>
+      
+      <p>Hola,recibimos una solicitud para restablecer tu contraseña de <strong>ToyStore</strong>. Usa el botón de abajo para cambiar tu contraseña. Este enlace será válido solo durante <strong>1 hora</strong>.</p>
+      <a href="{{resetUrl}}" target="_blank">Restablecer contraseña</a>
+      <p>Si no solicitaste restablecer tu contraseña, ignora este correo. Tu contraseña no será modificada.</p>
+    </div>
+    
+    <!-- El footer de un mail-->
+    <div class="footer">
+      <p>Si necesitas ayuda, contáctanos en <a href="mailto:soporte@toystore.com">soporte@toystore.com</a>.</p>
+      <p>&copy; 2024 ToyStore. Todos los derechos reservados.</p>
+    </div>
+  </div>
 </body>
 </html>
