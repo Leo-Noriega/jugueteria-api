@@ -1,10 +1,10 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+import Product from "./Product.js";
 
 const ProductImage = sequelize.define("ProductImage", {
-    product_image_id: {
+    id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         primaryKey: true,
         autoIncrement: true
     },
@@ -12,20 +12,15 @@ const ProductImage = sequelize.define("ProductImage", {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'products', // Cambiar a 'Products'
-            key: 'product_id'
+            model: Product,
+            key: "product_id"
         },
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE'
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE"
     },
     image_url: {
         type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            isUrl: {
-                msg: 'El campo image_url debe ser una URL válida'
-            }
-        }
+        allowNull: false
     },
     createdAt: {
         type: DataTypes.DATE,

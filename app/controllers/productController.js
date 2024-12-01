@@ -1,6 +1,20 @@
-import Product from '../models/Product';
-import Category from '../models/Category';
-import ProductImage from '../models/ProductImage';
+import Product from '../models/Product.js';
+import Category from '../models/Category.js';
+import ProductImage from '../models/ProductImage.js';
+import multer from 'multer';
+import path from 'path';
+
+// Configuración de multer para guardar las imágenes en la carpeta 'uploads'
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`);
+    }
+});
+
+const upload = multer({ storage });
 
 const createProduct = async (req, res) => {
     try {
@@ -12,8 +26,21 @@ const createProduct = async (req, res) => {
             category_id,
             stock
         });
+
+        if (req.files) {
+            const imagePromises = req.files.map(file => {
+                const imageUrl = path.join('uploads', file.filename);
+                return ProductImage.create({
+                    product_id: product.product_id,
+                    image_url: imageUrl
+                });
+            });
+            await Promise.all(imagePromises);
+        }
+
         return res.status(201).json({ message: 'El producto se ha creado exitosamente', product });
     } catch (error) {
+        console.error('Error al crear el producto:', error);
         return res.status(500).json({ message: 'Error al crear el producto', error: error.message });
     }
 };
@@ -60,6 +87,18 @@ const updateProduct = async (req, res) => {
             return res.status(404).json({ message: 'Producto no encontrado' });
         }
         await product.update({ name, description, price, category_id, stock });
+
+        if (req.files) {
+            const imagePromises = req.files.map(file => {
+                const imageUrl = path.join('uploads', file.filename);
+                return ProductImage.create({
+                    product_id: product.product_id,
+                    image_url: imageUrl
+                });
+            });
+            await Promise.all(imagePromises);
+        }
+
         return res.status(200).json({ message: 'Producto actualizado exitosamente', product });
     } catch (error) {
         return res.status(500).json({ message: 'Error al actualizar el producto', error: error.message });
@@ -87,5 +126,6 @@ export {
     getProducts,
     getProductById,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    upload // Exportar el middleware de multer
 }
