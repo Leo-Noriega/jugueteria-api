@@ -58,7 +58,7 @@ const initializeData = async () => {
 
     for (let i = 1; i <= 3; i++) {
       const productData = {
-        name: ` Producto ${i} ${categoryName}`,
+        name: `Producto ${i} ${categoryName}`,
         description: `Descripción del producto ${i} en la categoría ${categoryName}`,
         price: (i * 10) + 0.99, // Precio de ejemplo
         stock: 3,
@@ -78,15 +78,35 @@ const initializeData = async () => {
     phone_number: "123123123123"
   };
 
-  const [admin, created] = await User.findOrCreate({
+  const [admin, adminCreated] = await User.findOrCreate({
     where: { email: adminData.email },
     defaults: adminData
   });
 
-  if (created) {
+  if (adminCreated) {
     console.log("Usuario administrador creado");
   } else {
     console.log("Usuario administrador ya existe");
+  }
+
+  const countersalemanData = {
+    name: "Fernanda",
+    last_name: "Hernandez",
+    email: "fer@gmail.com",
+    password: await bcrypt.hash("fer2024", 10),
+    role: "countersaleman",
+    phone_number: "9876543210"
+  };
+
+  const [countersaleman, countersalemanCreated] = await User.findOrCreate({
+    where: { email: countersalemanData.email },
+    defaults: countersalemanData
+  });
+
+  if (countersalemanCreated) {
+    console.log("Usuario countersaleman creado");
+  } else {
+    console.log("Usuario countersaleman ya existe");
   }
 };
 
