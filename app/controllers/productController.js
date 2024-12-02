@@ -77,6 +77,25 @@ const getProductById = async (req, res) => {
     }
 };
 
+const getProductsByCategory = async (req, res) => {
+    try {
+        const { categoryId } = req.params;
+        const products = await Product.findAll({
+            where: { category_id: categoryId },
+            include: [
+                { model: Category, as: 'category' },
+                { model: ProductImage, as: 'images' }
+            ]
+        });
+        if (products.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron productos para esta categoría' });
+        }
+        return res.status(200).json(products);
+    } catch (error) {
+        return res.status(500).json({ message: 'Error al obtener los productos por categoría', error: error.message });
+    }
+};
+
 const updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
@@ -88,7 +107,7 @@ const updateProduct = async (req, res) => {
         }
         await product.update({ name, description, price, category_id, stock });
 
-        if (req.files) {
+        if (req.files && req.files.length > 0) {
             const imagePromises = req.files.map(file => {
                 const imageUrl = path.join('uploads', file.filename);
                 return ProductImage.create({
@@ -101,6 +120,7 @@ const updateProduct = async (req, res) => {
 
         return res.status(200).json({ message: 'Producto actualizado exitosamente', product });
     } catch (error) {
+        console.error('Error al actualizar el producto:', error);
         return res.status(500).json({ message: 'Error al actualizar el producto', error: error.message });
     }
 };
@@ -125,7 +145,8 @@ export {
     createProduct,
     getProducts,
     getProductById,
+    getProductsByCategory,
     updateProduct,
     deleteProduct,
-    upload // Exportar el middleware de multer
+    upload
 }

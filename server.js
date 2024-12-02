@@ -40,6 +40,9 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
 
+// Servir el directorio 'uploads' como archivos estáticos
+app.use('/uploads', express.static(uploadDir));
+
 const initializeData = async () => {
   const categories = ["Educativos", "Electrónicos", "Construcción", "De Mesa", "Peluches", "Exterior"];
   for (const categoryName of categories) {
