@@ -13,6 +13,7 @@ import bcrypt from 'bcrypt';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import returnRoutes from './app/routes/returnRoutes.js'
 
 dotenv.config()
 
@@ -31,6 +32,8 @@ app.use('/toystore', userRoutes)
 app.use('/toystore', orderRoutes)
 app.use('/toystore', categoriesRoutes)
 app.use('/toystore', productRoutes)
+app.use('/toystore', returnRoutes)
+
 
 // Crear el directorio 'uploads' si no existe
 const __filename = fileURLToPath(import.meta.url);
