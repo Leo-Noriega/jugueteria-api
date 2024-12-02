@@ -6,6 +6,7 @@ const checkout = async (req, res) => {
     try {
         const { items } = req.body;
         const cancel_url = `${process.env.FRONTEND_URL}carrito-de-compras`;
+        const success_url = `${process.env.FRONTEND_URL}success?session_id={CHECKOUT_SESSION_ID}`;
 
         const line_items = items.map(item => {
             return {
@@ -29,7 +30,7 @@ const checkout = async (req, res) => {
             },
             mode: 'payment',
             line_items: line_items,
-            success_url: 'http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}',
+            success_url: success_url,
             cancel_url: cancel_url,
             shipping_address_collection: {
                 allowed_countries: ['MX'],
@@ -44,7 +45,10 @@ const checkout = async (req, res) => {
 }
 
 const success = async (req, res) => {
+    const sessionId = req.body;
     const session = await stripe.checkout.sessions.retrieve(req.query.session_id);
+    console.log(session);
+    const lineItems = await stripe.checkout.sessions.listLineItems(req.query.session_id);
     const email = session.customer_details.email;
 }
 

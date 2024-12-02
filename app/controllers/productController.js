@@ -125,6 +125,23 @@ const updateProduct = async (req, res) => {
     }
 };
 
+//getProductsImageByProductId
+const getProductsImageByProductId = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const product = await Product.findByPk(id);
+        if (!product) {
+            return res.status(404).json({ message: 'Producto no encontrado' });
+        }
+        const images = await ProductImage.findAll({
+            where: { product_id: id }
+        });
+        return res.status(200).json(images);
+    } catch (error) {
+        return res.status(500).json({ message: 'Error al obtener las imágenes del producto', error: error.message });
+    }
+};
+
 const deleteProduct = async (req, res) => {
     try {
         const { id } = req.params;
