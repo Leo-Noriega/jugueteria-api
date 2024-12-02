@@ -30,4 +30,7 @@ const sendMailChangePassword = async (to, subject, text, resetUrl) => {
     }
 };
 
+const sendMailPaymentSuccess = async (to, subject, text, data) => {};
+const sendMailPaymentWithOxxo = async (to, subject, text, data) => {};  
+
 export default sendMailChangePassword;

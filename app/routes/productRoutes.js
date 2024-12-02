@@ -1,6 +1,7 @@
 import express from 'express';
 import { createProduct, getProducts, getProductById, updateProduct, deleteProduct, getProductsByCategory, upload } from "../controllers/productController.js";
 
+
 const router = express.Router();
 
 router.post('/products', upload.array('images', 5), createProduct); 

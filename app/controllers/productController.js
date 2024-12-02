@@ -148,5 +148,5 @@ export {
     getProductsByCategory,
     updateProduct,
     deleteProduct,
-    upload
+    upload // Exportar el middleware de multer
 }

@@ -6,9 +6,12 @@ import userRoutes from './app/routes/userRoutes.js'
 import orderRoutes from './app/routes/orderRoutes.js'
 import categoriesRoutes from './app/routes/categoryRoutes.js'
 import productRoutes from './app/routes/productRoutes.js'
+import paymentRoutes from './app/routes/paymentRoutes.js'
+import cartProductRoutes from './app/routes/cartProductRoutes.js'
 import './app/models/associations.js'
 import Category from './app/models/Category.js'
 import User from './app/models/User.js'
+import Product from './app/models/Product.js'
 import bcrypt from 'bcrypt';
 import fs from 'fs';
 import path from 'path';
@@ -33,7 +36,8 @@ app.use('/toystore', orderRoutes)
 app.use('/toystore', categoriesRoutes)
 app.use('/toystore', productRoutes)
 app.use('/toystore', returnRoutes)
-
+app.use('/toystore', paymentRoutes)
+app.use('/toystore', cartProductRoutes)
 
 // Crear el directorio 'uploads' si no existe
 const __filename = fileURLToPath(import.meta.url);
@@ -49,7 +53,20 @@ app.use('/uploads', express.static(uploadDir));
 const initializeData = async () => {
   const categories = ["Educativos", "Electrónicos", "Construcción", "De Mesa", "Peluches", "Exterior"];
   for (const categoryName of categories) {
-    await Category.findOrCreate({ where: { name: categoryName } });
+    const [category] = await Category.findOrCreate({ where: { name: categoryName } });
+    console.log(`Categoría ${category.name} creada con id ${category.id}`);
+
+    for (let i = 1; i <= 3; i++) {
+      const productData = {
+        name: ` Producto ${i} ${categoryName}`,
+        description: `Descripción del producto ${i} en la categoría ${categoryName}`,
+        price: (i * 10) + 0.99, // Precio de ejemplo
+        stock: 3,
+        category_id: category.id
+      };
+      const product = await Product.create(productData);
+      console.log(`Producto ${product.name} creado con id ${product.id} en la categoría ${category.name}`);
+    }
   }
 
   const adminData = {
