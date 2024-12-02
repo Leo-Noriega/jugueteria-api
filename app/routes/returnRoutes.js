@@ -1,5 +1,5 @@
 import express from "express";
-import { createReturn, getReturns, processReturn } from "../controllers/ReturnController.js";
+import { createReturn, getReturns, processReturn } from "../controllers/returnController.js";
 
 const router = express.Router();
 

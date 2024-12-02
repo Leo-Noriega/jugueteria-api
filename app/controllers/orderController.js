@@ -114,5 +114,6 @@ export {
     getOrders,
     getOrderById,
     updateOrder,
-    deleteOrder
+    deleteOrder, 
+    getOrdersByUserEmail
 }
