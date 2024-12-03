@@ -1,3 +1,5 @@
+import { Sequelize } from 'sequelize';
+import sequelize from '../config/db.js';
 import Product from '../models/Product.js';
 import Category from '../models/Category.js';
 import ProductImage from '../models/ProductImage.js';
@@ -96,6 +98,28 @@ const getProductsByCategory = async (req, res) => {
     }
 };
 
+const getTotalStockByCategory = async (req, res) => {
+    try {
+        const [results] = await sequelize.query(`
+            SELECT c.id AS category_id, 
+                   c.name AS category_name, 
+                   COALESCE(SUM(p.stock), 0) AS total_stock
+            FROM categories c
+            LEFT JOIN products p ON c.id = p.category_id
+            GROUP BY c.id, c.name
+        `);
+
+        return res.status(200).json(results);
+
+    } catch (error) {
+        console.error('Error al obtener el stock total por categoría:', error);
+        return res.status(500).json({
+            message: 'Error al obtener el stock total por categoría',
+            error: error.message
+        });
+    }
+};
+
 const updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
@@ -125,7 +149,6 @@ const updateProduct = async (req, res) => {
     }
 };
 
-//getProductsImageByProductId
 const getProductsImageByProductId = async (req, res) => {
     try {
         const { id } = req.params;
@@ -163,7 +186,8 @@ export {
     getProducts,
     getProductById,
     getProductsByCategory,
+    getTotalStockByCategory,
     updateProduct,
     deleteProduct,
     upload // Exportar el middleware de multer
-}
+};

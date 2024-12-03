@@ -1,43 +1,43 @@
-import express from 'express'
-import dotenv from 'dotenv'
+import express from 'express';
+import dotenv from 'dotenv';
 import cors from 'cors';
-import sequelize from './app/config/db.js'
-import userRoutes from './app/routes/userRoutes.js'
-import orderRoutes from './app/routes/orderRoutes.js'
-import categoriesRoutes from './app/routes/categoryRoutes.js'
-import productRoutes from './app/routes/productRoutes.js'
-import paymentRoutes from './app/routes/paymentRoutes.js'
-import cartProductRoutes from './app/routes/cartProductRoutes.js'
-import './app/models/associations.js'
-import Category from './app/models/Category.js'
-import User from './app/models/User.js'
-import Product from './app/models/Product.js'
+import sequelize from './app/config/db.js';
+import userRoutes from './app/routes/userRoutes.js';
+import orderRoutes from './app/routes/orderRoutes.js';
+import categoriesRoutes from './app/routes/categoryRoutes.js';
+import productRoutes from './app/routes/productRoutes.js';
+import paymentRoutes from './app/routes/paymentRoutes.js';
+import cartProductRoutes from './app/routes/cartProductRoutes.js';
+import './app/models/associations.js';
+import Category from './app/models/Category.js';
+import User from './app/models/User.js';
+import Product from './app/models/Product.js';
 import bcrypt from 'bcrypt';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import returnRoutes from './app/routes/returnRoutes.js'
+import returnRoutes from './app/routes/returnRoutes.js';
 
-dotenv.config()
+dotenv.config();
 
-const app = express()
-const PORT = process.env.NODE_DOCKER_PORT
+const app = express();
+const PORT = process.env.NODE_DOCKER_PORT;
 
 app.use(cors({
   origin: "*",
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
-}))
+}));
 
-app.use(express.json())
+app.use(express.json());
 
-app.use('/toystore', userRoutes)
-app.use('/toystore', orderRoutes)
-app.use('/toystore', categoriesRoutes)
-app.use('/toystore', productRoutes)
-app.use('/toystore', returnRoutes)
-app.use('/toystore', paymentRoutes)
-app.use('/toystore', cartProductRoutes)
+app.use('/toystore', userRoutes);
+app.use('/toystore', orderRoutes);
+app.use('/toystore', categoriesRoutes);
+app.use('/toystore', productRoutes);
+app.use('/toystore', returnRoutes);
+app.use('/toystore', paymentRoutes);
+app.use('/toystore', cartProductRoutes);
 
 // Crear el directorio 'uploads' si no existe
 const __filename = fileURLToPath(import.meta.url);
@@ -65,7 +65,7 @@ const initializeData = async () => {
         category_id: category.id
       };
       const product = await Product.create(productData);
-      console.log(`Producto ${product.name} creado con id ${product.id} en la categoría ${category.name}`);
+      console.log(`Producto ${product.name} creado con id ${product.product_id} en la categoría ${category.name}`);
     }
   }
 
@@ -78,12 +78,12 @@ const initializeData = async () => {
     phone_number: "123123123123"
   };
 
-  const [admin, adminCreated] = await User.findOrCreate({
+  const [admin, created] = await User.findOrCreate({
     where: { email: adminData.email },
     defaults: adminData
   });
 
-  if (adminCreated) {
+  if (created) {
     console.log("Usuario administrador creado");
   } else {
     console.log("Usuario administrador ya existe");
@@ -121,7 +121,7 @@ async function start() {
 }
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${process.env.NODE_LOCAL_PORT}`)
-})
+  console.log(`Server running on http://localhost:${process.env.NODE_LOCAL_PORT}`);
+});
 
 start();
