@@ -1,5 +1,5 @@
 import User from '../models/User.js';
-import sendMailChangePassword from '../utils/mailSender.js';
+import { sendMailChangePassword } from '../utils/mailSender.js';
 import { Op } from 'sequelize';
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
