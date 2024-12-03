@@ -1,5 +1,6 @@
 import express from 'express';
-import { createProduct, getProducts, getProductById, updateProduct, deleteProduct, getProductsByCategory, getTotalStockByCategory, upload, updateStock } from "../controllers/productController.js";
+import { createProduct, getProducts, getProductById, updateProduct, deleteProduct, getProductsByCategory, getTotalStockByCategory, upload, updateStock, searchProductByName} from "../controllers/productController.js";
+
 
 const router = express.Router();
 
@@ -12,6 +13,7 @@ router.delete('/products/:id', deleteProduct);
 router.get('/products/category/:categoryId', getProductsByCategory);
 router.get('/products/total-stock-by-category', getTotalStockByCategory); // Ruta para obtener el stock total por categoría
 router.put('/products/:id/stock/:quantity', updateStock);
+router.get('/products/search/:name', searchProductByName);
 
 
 export default router;

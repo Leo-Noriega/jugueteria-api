@@ -3,6 +3,7 @@ import sequelize from '../config/db.js';
 import Product from '../models/Product.js';
 import Category from '../models/Category.js';
 import ProductImage from '../models/ProductImage.js';
+import { Op } from 'sequelize';
 import multer from 'multer';
 import path from 'path';
 
@@ -210,6 +211,24 @@ const deleteProduct = async (req, res) => {
     }
 }
 
+const searchProductByName = async (req, res) => {          
+    const { name } = req.params; 
+    try {
+        const products = await Product.findAll({
+            where: { 
+                name: { [Op.like]: `%${name}%` }
+            },
+            limit: 5
+        });
+        return res.status(200).json(products);
+    } catch (error) {
+        return res.status(500).json({ 
+            message: 'Error al obtener los productos por nombre', 
+            error: error.message 
+        });
+    }
+};
+
 export {
     createProduct,
     getProducts,
@@ -219,5 +238,6 @@ export {
     updateProduct,
     deleteProduct,
     updateStock,
-    upload
+    upload,
+    searchProductByName,
 }
