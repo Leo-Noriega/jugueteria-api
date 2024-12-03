@@ -219,5 +219,5 @@ export {
     updateProduct,
     deleteProduct,
     updateStock,
-    upload // Exportar el middleware de multer
-};
+    upload
+}
