@@ -8,6 +8,7 @@ import categoriesRoutes from './app/routes/categoryRoutes.js';
 import productRoutes from './app/routes/productRoutes.js';
 import paymentRoutes from './app/routes/paymentRoutes.js';
 import cartProductRoutes from './app/routes/cartProductRoutes.js';
+import cartRoutes from './app/routes/cartRoutes.js';
 import './app/models/associations.js';
 import Category from './app/models/Category.js';
 import User from './app/models/User.js';
@@ -38,6 +39,7 @@ app.use('/toystore', productRoutes);
 app.use('/toystore', returnRoutes);
 app.use('/toystore', paymentRoutes);
 app.use('/toystore', cartProductRoutes);
+app.use('/toystore', cartRoutes);
 
 // Crear el directorio 'uploads' si no existe
 const __filename = fileURLToPath(import.meta.url);

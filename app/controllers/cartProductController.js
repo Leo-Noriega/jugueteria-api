@@ -5,8 +5,13 @@ import Product from "../models/Product.js";
 // Obtener todos los productos en el carrito
 const getCartProducts = async (req, res) => {
     try {
+        const { cart_id, product_id } = req.query;
         const cartProducts = await CartProduct.findAll({
-            include: [Cart, Product]
+            where: { cart_id, product_id },
+            include: [
+                { model: Cart, as: 'cart' },
+                { model: Product, as: 'productCart' }
+            ]
         });
         res.status(200).json(cartProducts);
     } catch (error) {
@@ -19,7 +24,10 @@ const getCartProductById = async (req, res) => {
     try {
         const { id } = req.params;
         const cartProduct = await CartProduct.findByPk(id, {
-            include: [Cart, Product]
+            include: [
+                { model: Cart, as: 'cart' },
+                { model: Product, as: 'productCart' }
+            ]
         });
         if (cartProduct) {
             res.status(200).json(cartProduct);
@@ -35,8 +43,18 @@ const getCartProductById = async (req, res) => {
 const addCartProduct = async (req, res) => {
     try {
         const { cart_id, product_id, quantity } = req.body;
-        const newCartProduct = await CartProduct.create({ cart_id, product_id, quantity });
-        res.status(201).json(newCartProduct);
+        const existingCartProduct = await CartProduct.findOne({
+            where: { cart_id, product_id }
+        });
+
+        if (existingCartProduct) {
+            existingCartProduct.quantity += quantity;
+            await existingCartProduct.save();
+            res.status(200).json(existingCartProduct);
+        } else {
+            const newCartProduct = await CartProduct.create({ cart_id, product_id, quantity });
+            res.status(201).json(newCartProduct);
+        }
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

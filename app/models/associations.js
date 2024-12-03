@@ -65,6 +65,6 @@ CartProduct.belongsTo(Cart, { foreignKey: 'cart_id', as: 'cart' });
 Category.hasMany(Product, { foreignKey: 'category_id', as: 'products' });
 Product.belongsTo(Category, { foreignKey: 'category_id', as: 'category' });
 
-//Asociaciones entre Order y OrderDetail
+// Asociaciones entre Order y OrderDetail
 Order.hasMany(OrderDetail, { foreignKey: 'order_id', as: 'orderDetails' });
 OrderDetail.belongsTo(Order, { foreignKey: 'order_id', as: 'order' });
