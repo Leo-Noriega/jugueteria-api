@@ -61,6 +61,35 @@ const getProducts = async (req, res) => {
     }
 };
 
+const updateStock = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const quantity = parseInt(req.params.quantity, 10); 
+
+        if (isNaN(quantity) || quantity <= 0) {
+            return res.status(400).json({ message: 'La cantidad debe ser un número válido mayor a 0' });
+        }
+
+        const product = await Product.findByPk(id);
+        if (!product) {
+            return res.status(404).json({ message: 'El producto no se ha encontrado' });
+        }
+
+        if (product.stock - quantity < 0) {
+            return res.status(400).json({ message: 'No hay suficiente stock disponible' });
+        }
+
+        product.stock -= quantity; 
+        await product.save();
+
+        return res.status(200).json({ message: 'Stock actualizado correctamente', product });
+    } catch (error) {
+        console.error('Error al actualizar el stock:', error);
+        return res.status(500).json({ message: 'Error al actualizar el stock', error: error.message });
+    }
+};
+
+
 const getProductById = async (req, res) => {
     try {
         const { id } = req.params;
@@ -189,5 +218,6 @@ export {
     getTotalStockByCategory,
     updateProduct,
     deleteProduct,
+    updateStock,
     upload // Exportar el middleware de multer
 };
