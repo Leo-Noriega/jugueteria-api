@@ -24,45 +24,35 @@ const createOrder = async (req, res) => {
     }
 };
 
-const getOrdersByUserEmail = async (req, res) => {
+const getOrdersByUserId = async (req, res) => {
     try {
-        const email = req.params.email;
-        const user = await User.findOne({
-            where: { email: email },
-            include: [{ model: Order, as: 'orders' }]
-        });
-        if (user) {
-            res.status(200).json(user.orders);
-        } else {
-            res.status(404).json({ error: 'Usuario no encontrado' });
-        }
+        const userId = parseInt('3', 10);
+        const orders = await Order.findAll({ where: { user_id: userId } });
+        if (orders.length > 0) { res.status(200).json(orders); }
+        else { res.status(404).json({ error: "No se encontraron órdenes para este usuario" }); }
     }
-    catch (error) {
-        console.error('Error al obtener las órdenes:', error);
-       
-        res.status(500).json({ error: 'Error al obtener las órdenes' });
-    }
-}
+    catch (error) { console.error("Error al obtener las órdenes:", error); res.status(500).json({ error: 'Error al obtener las órdenes' }); }
+};
 
 const getOrders = async (req, res) => {
-    try{
+    try {
         const orders = await Order.findAll();
         res.status(200).json(orders);
-    } catch (error){
+    } catch (error) {
         console.error("Error al obtener las ordenes:", error);
         res.status(500).json({ error: 'Error al obtener las ordenes' });
     }
 };
 
 const getOrderById = async (req, res) => {
-    try{
+    try {
         const order = await Order.findByPk(req.params.id);
         if (order) {
             res.status(200).json(order);
-        }else{
+        } else {
             res.status(404).json({ error: "Orden no encontrada" });
         }
-    } catch (error){
+    } catch (error) {
         console.error("Error al obtener la orden:", error);
         res.status(500).json({ error: 'Error al obtener la orden' });
     }
@@ -114,6 +104,6 @@ export {
     getOrders,
     getOrderById,
     updateOrder,
-    deleteOrder, 
-    getOrdersByUserEmail
+    deleteOrder,
+    getOrdersByUserId
 }
