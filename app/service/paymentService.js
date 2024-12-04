@@ -115,6 +115,9 @@ const success = async (req, res) => {
                     quantity: item.quantity,
                     unit_price: item.price
                 });
+                
+                product.stock -= item.quantity;
+                await product.save();
             }
         };
         res.json({ message: 'Pago exitoso' });
