@@ -4,6 +4,8 @@ import Order from '../models/Order.js';
 import User from '../models/User.js';
 import Address from '../models/Address.js';
 import Product from '../models/Product.js';
+import Cart from '../models/Cart.js';
+import CartProduct from '../models/CartProduct.js';
 import { sendMailPaymentSuccess } from '../utils/mailSender.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -115,11 +117,18 @@ const success = async (req, res) => {
                     quantity: item.quantity,
                     unit_price: item.price
                 });
-                
+
                 product.stock -= item.quantity;
                 await product.save();
             }
+
+            const cart = await Cart.findOne({ where: { user_id: userId } });
+            if (cart) {
+                await CartProduct.destroy({ where: { cart_id: cart.id } });
+                await cart.destroy();
+            }
         };
+        
         res.json({ message: 'Pago exitoso' });
 
     } catch (error) {
