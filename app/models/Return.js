@@ -55,6 +55,10 @@ const Return = sequelize.define("Return", {
             }
         }
     },
+    product_name:{
+        type: DataTypes.TEXT,
+        allowNull:true
+    },
     reason: {
         type: DataTypes.TEXT,
         allowNull: true

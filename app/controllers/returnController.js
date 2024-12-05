@@ -2,7 +2,7 @@ import Return from "../models/Return.js";
 
 const createReturn = async (req, res) => {
     try {
-        const { order_id, product_id, user_id, quantity, reason, evidence_url } = req.body;
+        const { order_id, product_id, user_id, quantity, reason, rejection_reason, product_name , evidence_url } = req.body;
 
         const newReturn = await Return.create({
             order_id,
@@ -10,6 +10,8 @@ const createReturn = async (req, res) => {
             user_id,
             quantity,
             reason,
+            rejection_reason,
+            product_name,
             evidence_url
         });
 
