@@ -63,6 +63,10 @@ const Return = sequelize.define("Return", {
         type: DataTypes.TEXT,
         allowNull: true
     },
+    description:{
+        type: DataTypes.TEXT,
+        allowNull:true
+    },
     status: {
         type: DataTypes.STRING,
         allowNull: false,
