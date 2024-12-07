@@ -21,10 +21,27 @@ const createReturn = async (req, res) => {
     }
 };
 
+
 const getReturns = async (req, res) => {
     try {
         const returns = await Return.findAll();
         res.status(200).json(returns);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+const getReturnByOrderId = async (req, res) => {
+    try {
+        const { order_id } = req.params; 
+
+        const returnRequest = await Return.findOne({ where: { order_id } }); 
+
+        if (returnRequest) {
+            res.status(200).json(returnRequest);
+        } else {
+            res.status(200).json(null);
+        }
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -52,5 +69,6 @@ const processReturn = async (req, res) => {
 export {
     createReturn,
     getReturns,
+    getReturnByOrderId,
     processReturn
 };
