@@ -1,5 +1,5 @@
 import User from '../models/User.js';
-import { sendMailChangePassword } from '../utils/mailSender.js';
+import { sendMailChangePassword, sendMailRegistrationConfirmation } from '../utils/mailSender.js';
 import { Op } from 'sequelize';
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
@@ -41,6 +41,10 @@ const createUser = async (req, res) => {
     });
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    // Enviar correo de confirmación de registro
+    await sendMailRegistrationConfirmation(user.email, 'Confirmación de Registro', user.name);
+
     res.status(201).json({ token, userId: user.user_id });
   } catch (error) {
     console.error("Error al crear el usuario:", error);

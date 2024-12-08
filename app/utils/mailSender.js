@@ -55,8 +55,28 @@ const sendMailPaymentSuccess = async (to, subject, text, pedido, fecha, nombre, 
     } catch (error) {
         console.error("Error al enviar el correo:", error);
     }
-
 };
+
+const sendMailRegistrationConfirmation = async (to, subject, nombre) => {
+    const templatePath = path.resolve('app/template/emailRegister.html');
+    let html = fs.readFileSync(templatePath, 'utf8');
+    html = html.replace('{{nombre}}', nombre);
+
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to,
+        subject,
+        html
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log("Correo de confirmación de registro enviado correctamente");
+    } catch (error) {
+        console.error("Error al enviar el correo de confirmación de registro:", error);
+    }
+};
+
 const sendMailPaymentWithOxxo = async (to, subject, text, data) => {};  
 
 const sendMailReturnProduct = async (to, subject, text, data) => {};
@@ -64,6 +84,7 @@ const sendMailReturnProduct = async (to, subject, text, data) => {};
 export {
     sendMailChangePassword,
     sendMailPaymentSuccess,
+    sendMailRegistrationConfirmation,
     sendMailPaymentWithOxxo,
     sendMailReturnProduct
 };

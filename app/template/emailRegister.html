@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Registro - ToyStore</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            color: #263238;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background-color: #EF1A23;
+            text-align: center;
+            padding: 20px 0;
+        }
+        .header img {
+            max-width: 150px;
+        }
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+        .content h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .content p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .footer {
+            background-color: #EF1A23;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 14px;
+            color: white;
+        }
+        .footer a {
+            color: #5C68E2;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+        </div>
+        <div class="content">
+            <h1>¡Bienvenido a ToyStore!</h1>
+            <p>Hola {{nombre}},</p>
+            <p>Gracias por registrarte en ToyStore. Estamos emocionados de tenerte con nosotros.</p>
+            <p>Si tienes alguna pregunta o necesitas ayuda, no dudes en contactarnos.</p>
+        </div>
+        <div class="footer">
+            <p>Si necesitas ayuda, contáctanos en <a href="mailto:toystore@gmail.com">toystore@gmail.com</a>.</p>
+            <p>&copy; 2024 ToyStore. Todos los derechos reservados.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -72,9 +72,9 @@ const initializeData = async () => {
   }
 
   const adminData = {
-    name: "Leonardo",
-    last_name: "Noriega",
-    email: "leonoriega100@gmail.com",
+    name: "Administrador",
+    last_name: "Toystore",
+    email: "toystore@gmail.com",
     password: await bcrypt.hash("Noriega0", 10),
     role: "ADMIN",
     phone_number: "123123123123"
