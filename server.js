@@ -63,7 +63,7 @@ const initializeData = async () => {
         name: `Producto ${i} ${categoryName}`,
         description: `Descripción del producto ${i} en la categoría ${categoryName}`,
         price: (i * 10) + 0.99, // Precio de ejemplo
-        stock: 3,
+        stock: 5,
         category_id: category.id
       };
       const product = await Product.create(productData);
@@ -110,7 +110,50 @@ const initializeData = async () => {
   } else {
     console.log("Usuario countersaleman ya existe");
   }
+
+  const userData1 = {
+    name: "Vulmaro",
+    last_name: "Martinez",
+    email: "vulmarotl20@gmail.com",
+    password: await bcrypt.hash("12345678", 10),
+    role: "user",
+    phone_number: "123123123123"
+  };
+  
+  const [user, uCreated] = await User.findOrCreate({
+    where: { email: userData1.email },
+    defaults: userData1
+  });
+  
+  if (uCreated) {
+    console.log("Usuario 1 creado");
+  } else {
+    console.log("Usuario 1 ya existe");
+  }
+  
+  const userData2 = {
+    name: "Anett",
+    last_name: "Vera",
+    email: "anettyomalivera@gmail.com",
+    password: await bcrypt.hash("12345678", 10),
+    role: "user",
+    phone_number: "123123123123"
+  };
+  
+  const [user2, uCreated2] = await User.findOrCreate({
+    where: { email: userData2.email },
+    defaults: userData2
+  });
+  
+  if (uCreated2) {
+    console.log("Usuario 2 creado");
+  } else {
+    console.log("Usuario 2 ya existe");
+  }  
+
 };
+
+
 
 async function start() {
   try {

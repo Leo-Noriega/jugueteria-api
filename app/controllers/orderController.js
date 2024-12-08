@@ -1,4 +1,5 @@
 import Order from '../models/Order.js';
+import OrderDetail from '../models/OrderDetail.js';
 
 const createOrder = async (req, res) => {
     try {
@@ -26,7 +27,7 @@ const createOrder = async (req, res) => {
 
 const getOrdersByUserId = async (req, res) => {
     try {
-        const userId = parseInt('3', 10);
+        const userId = req.params.id;
         const orders = await Order.findAll({ where: { user_id: userId } });
         if (orders.length > 0) { res.status(200).json(orders); }
         else { res.status(404).json({ error: "No se encontraron órdenes para este usuario" }); }
@@ -99,11 +100,27 @@ const deleteOrder = async (req, res) => {
     }
 };
 
+const getProductsByOrderId = async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        const products = await OrderDetail.findAll({ where: { order_id: orderId } });
+        if (products.length > 0) {
+            res.status(200).json(products);
+        } else {
+            res.status(404).json({ error: "No se encontraron productos para esta orden" });
+        }
+    } catch (error) {
+        console.error("Error al obtener los productos de la orden:", error);
+        res.status(500).json({ error: "Error al obtener los productos de la orden" });
+    }
+};
+
 export {
     createOrder,
     getOrders,
     getOrderById,
     updateOrder,
     deleteOrder,
-    getOrdersByUserId
+    getOrdersByUserId,
+    getProductsByOrderId
 }
