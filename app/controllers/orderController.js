@@ -1,18 +1,43 @@
 import Order from '../models/Order.js';
 import OrderDetail from '../models/OrderDetail.js';
+import Product from '../models/Product.js';
 
 const createOrder = async (req, res) => {
     try {
         const orderData = req.body;
+
         if ('delivery_address' in orderData) {
             orderData.delivery_address_id = orderData.delivery_address;
             delete orderData.delivery_address;
         }
 
-        const newOrder = await Order.create(orderData);
-        res.status(201).json(newOrder);
+        const { orderDetails, ...orderInfo } = orderData;
+
+        const newOrder = await Order.create(orderInfo);
+
+        if (Array.isArray(orderDetails)) {
+            for (const item of orderDetails) {
+                const product = await Product.findOne({ where: { name: item.name } });
+                if (!product) {
+                    return res.status(400).json({ error: `Producto no encontrado: ${item.name}` });
+                }
+
+                await OrderDetail.create({
+                    order_id: newOrder.order_id,
+                    product_id: product.product_id,
+                    quantity: item.quantity,
+                    unit_price: item.unit_price,
+                });
+            }
+        }
+
+        res.status(201).json({ 
+            message: "Orden creada exitosamente",
+            order: newOrder 
+        });
     } catch (error) {
         console.error("Error al crear la orden:", error);
+
         if (error.name === 'SequelizeValidationError') {
             const validationErrors = {};
             error.errors.forEach(err => {
@@ -24,6 +49,7 @@ const createOrder = async (req, res) => {
         }
     }
 };
+
 
 const getOrdersByUserId = async (req, res) => {
     try {
