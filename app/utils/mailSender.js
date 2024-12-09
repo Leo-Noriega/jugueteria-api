@@ -79,12 +79,54 @@ const sendMailRegistrationConfirmation = async (to, subject, nombre) => {
 
 const sendMailPaymentWithOxxo = async (to, subject, text, data) => {};  
 
-const sendMailReturnProduct = async (to, subject, text, data) => {};
+const sendMailReturnProductSuccess = async (to, subject, text, status) => {
+    const templatePath = path.resolve('app/template/emailReturnSuccess.html');
+    let html = fs.readFileSync(templatePath, 'utf8');
+    html = html.replace('{{status}}', status);
+
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to,
+        subject,
+        text,
+        html
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log("Correo de devolución enviado correctamente");
+    } catch (error) {
+        console.error("Error al enviar el correo de devolución:", error);
+    }
+};
+
+const sendMailReturnProductFailed = async (to, subject, text, status, rejection_reason) => {
+    const templatePath = path.resolve('app/template/emailReturnFailed.html');
+    let html = fs.readFileSync(templatePath, 'utf8');
+    html = html.replace('{{status}}', status);
+    html = html.replace('{{rejection_reason}}', rejection_reason);
+
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to,
+        subject,
+        text,
+        html
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log("Correo de devolución enviado correctamente");
+    } catch (error) {
+        console.error("Error al enviar el correo de devolución:", error);
+    }
+};
 
 export {
     sendMailChangePassword,
     sendMailPaymentSuccess,
     sendMailRegistrationConfirmation,
     sendMailPaymentWithOxxo,
-    sendMailReturnProduct
+    sendMailReturnProductSuccess,
+    sendMailReturnProductFailed
 };
